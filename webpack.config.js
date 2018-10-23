@@ -2,7 +2,8 @@ const path = require("path")
 const webpack = require("webpack")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = (env, argv) => ({
 	// argv.mode = production / development  
@@ -16,9 +17,9 @@ module.exports = (env, argv) => ({
 	},
 	output: {
 		path: path.join(__dirname, "./dist"),
-		publicPath:"./dist",
-		filename: argv.mode === 'development' ? '[name].js' : '[name].[contenthash].js'   // [name] = placeholder, referring to entry point name (app)
-																					    // Webpack 4 prebuilt functionality for caching via contenthash (production)
+		//publicPath:"./public",     														// urls that webpack encounters will be re-written to begin with "/public/".
+		filename: argv.mode === 'development' ? '[name].js' : '[name].[contenthash].js'   	// [name] = placeholder, referring to entry point name (app)
+																					   	    // Webpack 4 prebuilt functionality for caching via contenthash (production)
 	},
 	module:{
 		rules:[
@@ -40,6 +41,14 @@ module.exports = (env, argv) => ({
 						'css-loader'
 				]
 			},
+		 	{
+				test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
+				loader: 'file-loader',
+				options: {
+					name: argv.mode === 'development' ? "images/[name].[ext]" : "images/[name].[hash].[ext]",
+					limit: 25000
+				}
+      		},
 			{ 
 				test: /\.js$/, 	
 				exclude: /node_modules/, 
@@ -55,7 +64,13 @@ module.exports = (env, argv) => ({
 				cache: true,
         		parallel: true,
 			}),
-			new OptimizeCSSAssetsPlugin({})
+			new OptimizeCSSAssetsPlugin({}),
+			new HtmlWebpackPlugin({
+				inject: false,
+				hash: true,
+				template: './index.html',
+				filename: 'index.html'
+		    })
 	    ]
   	},
 	plugins: [

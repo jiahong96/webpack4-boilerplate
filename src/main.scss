@@ -1,5 +1,7 @@
 $primary: red;
+$birdImageUrl: './images/birds.jpg';
 
 body{
 	color: $primary;
+	background: url($birdImageUrl);
 }
