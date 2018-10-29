@@ -77,19 +77,25 @@ module.exports = (env, argv) => ({
         		parallel: true,
 			}),
 			new OptimizeCSSAssetsPlugin({}),
-			new HtmlWebpackPlugin({
-				inject: false,
-				hash: true,
-				template: './index.html',
-				filename: 'index.html'
-		    }),
-			new CleanWebpackPlugin(pathsToClean, cleanOptions),
 	    ]
   	},
 	plugins: [
         new MiniCssExtractPlugin({
 		    filename: argv.mode === 'development' ? '[name].css' : '[name].[contenthash].css',   // minicss plugin hash (production)
 		    chunkFilename: argv.mode === 'development' ? '[id].css' : '[id].[contenthash].css',
-        })
+        }),
+		new HtmlWebpackPlugin({
+			inject: false,
+			hash: true,
+			template: './index.html',
+			filename: 'index.html'
+	    }),
+		new HtmlWebpackPlugin({
+			inject: false,
+			hash: true,
+			template: './_index.html',
+			filename: '_index.html'
+	    }),
+		new CleanWebpackPlugin(pathsToClean, cleanOptions),
     ]
 });
