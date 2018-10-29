@@ -4,6 +4,18 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+
+// the path(s) that should be cleaned
+let pathsToClean = [
+  'dist',
+]
+
+// the clean options to use
+let cleanOptions = {
+  root:     __dirname,
+  verbose:  true,
+}
 
 module.exports = (env, argv) => ({
 	// argv.mode = production / development  
@@ -70,7 +82,8 @@ module.exports = (env, argv) => ({
 				hash: true,
 				template: './index.html',
 				filename: 'index.html'
-		    })
+		    }),
+			new CleanWebpackPlugin(pathsToClean, cleanOptions),
 	    ]
   	},
 	plugins: [
