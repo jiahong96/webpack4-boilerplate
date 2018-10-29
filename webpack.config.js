@@ -12,8 +12,8 @@ module.exports = (env, argv) => ({
 		app: [
 			'./src/main.js',
 			'./src/main.scss',   // instead of importing in js
-		]
-
+		],
+		vendor: ['jquery']
 	},
 	output: {
 		path: path.join(__dirname, "./dist"),
