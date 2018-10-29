@@ -55,11 +55,27 @@ module.exports = (env, argv) => ({
 			},
 		 	{
 				test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
-				loader: 'file-loader',
-				options: {
-					name: argv.mode === 'development' ? "images/[name].[ext]" : "images/[name].[hash].[ext]",
-					limit: 25000
-				}
+				loaders: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: argv.mode === 'development' ? "images/[name].[ext]" : "images/[name].[hash].[ext]",
+							limit: 25000
+						}
+					},
+					{
+						loader: 'img-loader',
+						options: {
+							plugins: [
+								//require('imagemin-gifsicle')({}),
+								require('imagemin-mozjpeg')({}),
+								require('imagemin-optipng')({}),
+								//require('imagemin-svgo')({})
+							]
+						}
+					}
+				]
+				
       		},
 			{ 
 				test: /\.js$/, 	
